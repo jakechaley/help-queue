@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import * as a from "./../actions";
 
 
+
 class TicketControl extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +16,26 @@ class TicketControl extends React.Component {
       selectedTicket: null,
       editing: false
     };
+  }
+
+  componentDidMount() {
+    this.waitTimeUpdateTimer = setInterval(() => 
+      this.updateTicketElapsedWaitTime(),
+    1000
+    );
+  }
+
+  componentDidUpdate() {
+    console.log("component updated!");
+    clearInterval(this.waitTimeUpdateTimer)
+  }
+
+  componentWillUnmount(){
+    console.log("component unmounted!");
+  }
+
+  updateTicketElapsedWaitTime = () => {
+    console.log("tick");
   }
 
   handleEditingTicketInList = (ticketToEdit) => {
