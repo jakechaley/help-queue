@@ -7,6 +7,7 @@ function Ticket(props){
       <div onClick={() => props.whenTicketClicked(props.id)}>
         <h3>{props.location} - {props.names}</h3>
         <p><em>{props.issue}</em></p>
+        <p><em>{props.formattedWaitTime}</em></p>
         <hr/>
       </div>
     </React.Fragment>
@@ -18,6 +19,7 @@ Ticket.propTypes = {
   location: PropTypes.string.isRequired,
   issue: PropTypes.string,
   id: PropTypes.string,
-  whenTicketClicked: PropTypes.func 
+  whenTicketClicked: PropTypes.func ,
+  formattedWaitTime: PropTypes.string
 }
 export default Ticket;
