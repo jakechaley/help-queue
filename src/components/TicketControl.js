@@ -6,6 +6,7 @@ import EditTicketForm from "./EditTicketForm";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import * as a from "./../actions";
+import { withFirestore } from "react-redux-firebase";
 
 
 
@@ -38,10 +39,7 @@ class TicketControl extends React.Component {
     });
   }
 
-  handleEditingTicketInList = (ticketToEdit) => {
-    const { dispatch } = this.props;
-    const action = a.addTicket(ticketToEdit);
-    dispatch(action);
+  handleEditingTicketInList = () => {
     this.setState({
       editing: false,
       selectedTicket: null
@@ -55,23 +53,26 @@ class TicketControl extends React.Component {
   }
 
   handleDeletingTicket = (id) => {
-    const { dispatch } = this.props;
-    const action = a.deleteTicket(id) 
-    dispatch(action);
+    this.props.firestore.delete({collection: "tickets", doc: id});
     this.setState({selectedTicket: null});
   }
 
   handleChangingSelectedTicket = (id) => {
-    const selectedTicket = this.props.mainTicketList[id];
-    this.setState({selectedTicket: selectedTicket});
+    this.props.firestore.get({collection: "tickets", doc: id}).then((ticket) => {
+      const firestoreTicket = {
+        names: ticket.get("names"),
+        location: ticket.get("location"),
+        issue: ticket.get("issue"),
+        is: ticket.id
+      }
+      this.setState({selectedTicket: firestoreTicket });
+    });
   }
 
-  handleAddingNewTicketToList = (newTicket) => {
+  handleAddingNewTicketToList = () => {
     const { dispatch } = this.props;
-    const action = a.addTicket(newTicket);
+    const action = a.toggleForm();
     dispatch(action);
-    const action2 = a.toggleForm();
-    dispatch(action2);
   }
 
   handleClick = () => {
@@ -133,4 +134,4 @@ TicketControl.propTypes = {
 
 TicketControl = connect(mapStateToProps)(TicketControl);
 
-export default TicketControl;
+export default withFirestore(TicketControl);

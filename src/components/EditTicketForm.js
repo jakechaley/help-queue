@@ -1,8 +1,9 @@
 import React from "react";
 import ReusableForm from "./ReusableForm";
 import PropTypes from "prop-types";
-
+import { useFirestore } from "react-redux-firebase";
 function EditTicketForm (props) {
+  const firestore = useFirestore();
   const { ticket } = props;
 
   function handleEditTicketFormSubmission(event) {
